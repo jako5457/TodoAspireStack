@@ -1,0 +1,26 @@
+﻿@page "/todo/create"
+@rendermode InteractiveServer
+@inject ITodoApiService _TodoApi
+@inject NavigationManager _Nav
+
+<h3>New TodoItem</h3>
+
+<EditForm Model="Name" OnSubmit="Submit">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Name</label>
+        <input type="text" class="form-control" id="Name" @bind-value="Name" placeholder="Todo name">
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Create Todo</button>
+</EditForm>
+
+@code {
+    string Name = "";
+
+    public async Task Submit()
+    {
+        await _TodoApi.CreateTodoItemAsync(new Api.Models.CreateTodoItemModel() { Name = Name });
+
+        _Nav.NavigateTo("/");
+    }
+}

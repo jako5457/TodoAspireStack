@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoAspireStack.AppHost", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoAspireStack.ServiceDefaults", "TodoAspireStack.ServiceDefaults\TodoAspireStack.ServiceDefaults.csproj", "{33D5891B-FE19-4EB5-8FBF-F73FE88C81AE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.WebApp", "Todo.WebApp\Todo.WebApp.csproj", "{3B608214-016C-4890-B943-7F3DF6F83016}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{33D5891B-FE19-4EB5-8FBF-F73FE88C81AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33D5891B-FE19-4EB5-8FBF-F73FE88C81AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33D5891B-FE19-4EB5-8FBF-F73FE88C81AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B608214-016C-4890-B943-7F3DF6F83016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B608214-016C-4890-B943-7F3DF6F83016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B608214-016C-4890-B943-7F3DF6F83016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B608214-016C-4890-B943-7F3DF6F83016}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

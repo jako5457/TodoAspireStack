@@ -1,0 +1,67 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject ITodoApiService _TodoApi
+@inject NavigationManager _Nav
+
+<PageTitle>TodoList</PageTitle>
+
+<h1>My Todolist</h1>
+<button class="btn btn-primary" @onclick='() => _Nav.NavigateTo("/todo/create")' disabled="@(IsBusy)" >New Todo</button>
+<br />
+@if (IsBusy)
+{
+    <h1>Loading.....</h1>
+}
+else
+{
+    <ul class="list-group" style="margin-top:10px">
+        @foreach (var item in TodoItems)
+        {
+            <li class="list-group-item"><button class="btn btn-primary" @onclick='() => ToggleComplete(item)' disabled="@(IsBusy)">Toggle</button> @item.Name <div style="color:green; display:inline">@CheckCompletedState(item.IsCompleted)</div> </li>
+        }
+    </ul>
+}
+
+
+@code {
+
+    bool IsBusy = true;
+
+    List<TodoItemModel> TodoItems = new List<TodoItemModel>(); 
+
+    protected override async Task OnInitializedAsync()
+    {
+        await refresh();
+    }
+
+    public async Task refresh()
+    {
+        IsBusy = true;
+        StateHasChanged();
+
+        TodoItems = await _TodoApi.GetTodosAsync();
+        IsBusy = false;
+        StateHasChanged();
+    }
+
+    public async Task ToggleComplete(TodoItemModel model)
+    {
+        IsBusy = true;
+        StateHasChanged();
+        await _TodoApi.EditTodoItemAsync(model.TodoItemId,new EditTodoItemModel() { Name = model.Name, IsCompleted = !model.IsCompleted });
+        await refresh();
+    }
+
+    public string CheckCompletedState(bool state)
+    {
+        if (state)
+        {
+            return "- Completed!";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+}
