@@ -16,7 +16,7 @@ builder.AddProject<Projects.Todo_WebApp>("todo-webapp")
 
 if (builder.Environment.IsDevelopment())
 {
-    TodoApi.WithExternalHttpEndpoints();
+    //TodoApi.WithExternalHttpEndpoints();
 }
 
 builder.Build().Run();

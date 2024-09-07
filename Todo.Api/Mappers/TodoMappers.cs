@@ -9,25 +9,31 @@ namespace Todo.Api.Mappers
 
         public static TodoItemModel ToModel(this TodoItem Item)
         {
+            var (TodoItemId,Name,IsCompleted,CreatedDate) = Item;
+
             return new TodoItemModel()
             {
-                CreatedDate = Item.CreatedDate,
-                IsCompleted = Item.IsCompleted,
-                Name = Item.Name,
-                TodoItemId = Item.TodoItemId,
+                CreatedDate = CreatedDate,
+                IsCompleted = IsCompleted,
+                Name = Name,
+                TodoItemId = TodoItemId,
             };
         }
 
         public static TodoItem ToEntity(this TodoItemModel Model)
         {
+
+            var (TodoItemId, Name, IsCompleted, CreatedDate) = Model;
+
             return new TodoItem()
             {
-                CreatedDate = Model.CreatedDate,
-                IsCompleted = Model.IsCompleted,
-                Name = Model.Name,
-                TodoItemId = Model.TodoItemId,
+                CreatedDate = CreatedDate,
+                IsCompleted = IsCompleted,
+                Name = Name,
+                TodoItemId = TodoItemId,
             };
         }
+
         public static TodoItem ToEntity(this CreateTodoItemModel Model)
         {
             return new TodoItem()
@@ -35,6 +41,7 @@ namespace Todo.Api.Mappers
                 Name = Model.Name
             };
         }
+
         public static TodoItem ToEntity(this EditTodoItemModel Model)
         {
             return new TodoItem()
