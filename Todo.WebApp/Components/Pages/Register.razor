@@ -1,0 +1,49 @@
+﻿@page "/Register"
+@using Todo.WebApp.Models.Login
+@rendermode InteractiveServer
+@inject ILoginService _LoginService
+@inject ILogger<Register> _Logger
+
+@if (ErrorMsg != string.Empty)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMsg
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">
+        Register
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" @bind-value="Model.email" id="Email" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="Password">Password</label>
+            <input type="password" @bind-value="Model.password" class="form-control" id="Password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary" @onclick="Submit" >Register</button>
+    </div>
+</div>
+
+@code {
+    private RegisterModel Model = new RegisterModel();
+
+    public string ErrorMsg = string.Empty;
+
+    private async Task Submit()
+    {
+        try
+        {
+            await _LoginService.RegisterAsync(Model);
+        }
+        catch (Exception e)
+        {
+            ErrorMsg = "Failed to register you. Trace code: " + e.HResult;
+            _Logger.LogError("Failed to register user: " + e.Message);
+        }
+    }
+
+}

@@ -9,9 +9,21 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 // API connection
+builder.Services.AddScoped<ILoginService,LoginService>();
 builder.Services.AddScoped<ITodoApiService, TodoApiService>();
 builder.Services.AddHttpClient<ITodoApiService, TodoApiService>(client => client.BaseAddress = new Uri("http://todo-api"));
+builder.Services.AddHttpClient<ILoginService, LoginService>(client => client.BaseAddress = new Uri("http://todo-api"));
 
 var app = builder.Build();
 
@@ -26,6 +38,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
 
 app.UseStaticFiles();
 app.UseAntiforgery();

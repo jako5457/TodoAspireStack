@@ -3,29 +3,37 @@
 @inject ITodoApiService _TodoApi
 @inject NavigationManager _Nav
 
+@if (errorMsg != string.Empty)
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMsg
+    </div>
+}
+
 <PageTitle>TodoList</PageTitle>
-
-<h1>My Todolist</h1>
-<button class="btn btn-primary" @onclick='() => _Nav.NavigateTo("/todo/create")' disabled="@(IsBusy)" >New Todo</button>
-<br />
-@if (IsBusy)
-{
-    <h1>Loading.....</h1>
-}
-else
-{
-    <ul class="list-group" style="margin-top:10px">
-        @foreach (var item in TodoItems)
-        {
-            <li class="list-group-item"><button class="btn btn-primary" @onclick='() => ToggleComplete(item)' disabled="@(IsBusy)">Toggle</button> @item.Name <div style="color:green; display:inline">@CheckCompletedState(item.IsCompleted)</div> </li>
-        }
-    </ul>
-}
-
+<ErrorBoundary>
+    <h1>My Todolist</h1>
+    <button class="btn btn-primary" @onclick='() => _Nav.NavigateTo("/todo/create")' disabled="@(IsBusy)">New Todo</button>
+    <br />
+    @if (IsBusy)
+    {
+        <h1>Loading.....</h1>
+    }
+    else
+    {
+        <ul class="list-group" style="margin-top:10px">
+            @foreach (var item in TodoItems)
+            {
+                <li class="list-group-item"><button class="btn btn-primary" @onclick='() => ToggleComplete(item)' disabled="@(IsBusy)">Toggle</button> @item.Name <div style="color:green; display:inline">@CheckCompletedState(item.IsCompleted)</div> </li>
+            }
+        </ul>
+    }
+</ErrorBoundary>
 
 @code {
 
     bool IsBusy = true;
+    string errorMsg = string.Empty;
 
     List<TodoItemModel> TodoItems = new List<TodoItemModel>(); 
 
@@ -36,12 +44,22 @@ else
 
     public async Task refresh()
     {
+
         IsBusy = true;
         StateHasChanged();
 
-        TodoItems = await _TodoApi.GetTodosAsync();
-        IsBusy = false;
-        StateHasChanged();
+        try
+        {
+            TodoItems = await _TodoApi.GetTodosAsync();
+            IsBusy = false;
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            errorMsg = e.Message;
+            IsBusy = false;
+            StateHasChanged();
+        }
     }
 
     public async Task ToggleComplete(TodoItemModel model)

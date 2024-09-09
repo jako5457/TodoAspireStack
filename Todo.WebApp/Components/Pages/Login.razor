@@ -1,0 +1,59 @@
+﻿@page "/Login"
+@using Todo.WebApp.Models.Login
+@rendermode InteractiveServer
+@inject ILoginService _LoginService
+@inject ILogger<Register> _Logger
+@inject NavigationManager _nav
+@inject IHttpContextAccessor _httpcontext
+
+@if (ErrorMsg != string.Empty)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMsg
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">
+        Login
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="email" class="form-control" @bind-value="Model.email" id="Email" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="Password">Password</label>
+            <input type="password" class="form-control" @bind-value="Model.password" id="Password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary" @onclick="Submit">Login</button>
+    </div>
+    <p>Are you not registered? <a @onclick='() => _nav.NavigateTo("/register")' >Register</a></p>
+</div>
+
+@code {
+    private LoginModel Model = new LoginModel();
+
+    public string ErrorMsg = string.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+        _httpcontext.HttpContext.Session.SetString(Convert.ToString(Random.Shared.Next(23)),"");
+        return base.OnInitializedAsync();
+    }
+
+    private async Task Submit()
+    {
+        try
+        {
+            await _LoginService.LoginAsync(Model);
+            _nav.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            ErrorMsg = "Failed to log in. Trace code: " + e.HResult;
+            _Logger.LogError("Failed to log in user: " + e.Message);
+        }
+    }
+
+}
